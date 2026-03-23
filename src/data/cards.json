@@ -1,0 +1,40 @@
+{
+  "aadarsh": {
+    "name": "Aadarsh Subedi",
+    "role": "CTO",
+    "company": "Ctrl Bits",
+    "email": "aadarsh@ctrlbits.xyz",
+    "phone": "+9779800000000",
+    "portfolio": "https://portfolio.com",
+    "linkedin": "https://linkedin.com/in/aadarsh",
+    "github": "https://github.com/aadarsh",
+    "twitter": "",
+    "avatar": "",
+    "accentColor": "#0f172a"
+  },
+  "rohan": {
+    "name": "Rohan Sharma",
+    "role": "CTO",
+    "company": "Ctrl Bits",
+    "email": "rohan@ctrlbits.xyz",
+    "phone": "+9779811111111",
+    "linkedin": "https://linkedin.com/in/rohan",
+    "github": "https://github.com/rohan",
+    "twitter": "",
+    "avatar": "",
+    "accentColor": "#0f172a"
+  },
+  "ritesh": {
+    "name": "Ritesh Aryal",
+    "role": "Jhadu wala",
+    "company": "Ctrl Bits",
+    "email": "ritesh@ctrlbits.xyz",
+    "phone": "+9779822222222",
+    "portfolio": "https://ritesh.design",
+    "linkedin": "https://linkedin.com/in/ritesh",
+    "github": "",
+    "twitter": "",
+    "avatar": "",
+    "accentColor": "#0f172a"
+  }
+}
