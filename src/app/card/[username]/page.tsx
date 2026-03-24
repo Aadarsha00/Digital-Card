@@ -29,7 +29,7 @@ export default async function CardPage({ params }: PageProps) {
     <main className="min-h-screen bg-neutral-100 flex flex-col items-center justify-center p-4 py-10">
       <ProfileCard card={card} />
       <p className="mt-6 text-xs text-slate-400 text-center">
-        Powered by <span className="font-medium text-slate-500">{card.company}</span>
+        Powered by <a href="https://ctrlbits.com" target="_blank" className="font-medium text-slate-500">{card.company}</a>
       </p>
     </main>
   );

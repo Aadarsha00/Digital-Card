@@ -7,7 +7,7 @@ export interface CardData {
   portfolio?: string;
   linkedin?: string;
   github?: string;
-  twitter?: string;
+  instagram?: string;
   avatar?: string;
   companyLogo?: string;
   accentColor?: string;
