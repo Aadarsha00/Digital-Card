@@ -11,4 +11,6 @@ export interface CardData {
   avatar?: string;
   companyLogo?: string;
   accentColor?: string;
+  description?: string;
+  location?: string;
 }

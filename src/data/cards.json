@@ -3,6 +3,8 @@
     "name": "Aadarsha Subedi",
     "role": "CTO",
     "company": "Ctrl Bits",
+    "location": "Kathmandu, Nepal",
+    "description": "Tech leader building scalable AI platforms and secure product architectures.",
     "email": "subediaadarsha0@gmail.com",
     "phone": "+977-9846757965",
     "portfolio": "",
@@ -15,6 +17,8 @@
   "abiral": {
     "name": "Abiral Ale",
     "role": "CEO",
+        "location": "Kathmandu, Nepal",
+
     "company": "Ctrl Bits",
     "email": "abiral@ctrlbits.com",
     "phone": "+977-9709659012",
@@ -23,12 +27,15 @@
     "github": "https://github.com/aviralale",
     "instagram": "https://instagram.com/aviral.who_",
     "avatar": "https://cdn.ctrlbits.com/assets/2026/03/ffcbf596-2b22-48d0-b675-0bfa21b7fea4_pfp_yJFyutB.jpeg",
-    "accentColor": "#0f172a"
+    "accentColor": "#0f172a",
+    "description":"Tech leader building scalable AI platforms and secure product architectures."
   },
   "ritesh": {
     "name": "Ritesh Aryal",
-    "role": "Ai/ML Engineer",
+    "role": "AI/ML Engineer",
     "company": "Ctrl Bits",
+        "location": "Kathmandu, Nepal",
+
     "email": "ritesharyal0223@gmail.com",
     "phone": "+977-9742907556",
     "portfolio": "",
@@ -42,6 +49,8 @@
     "name": "Meriyan Karki",
     "role": "Creative Director",
     "company": "Ctrl Bits",
+        "location": "Kathmandu, Nepal",
+
     "email": "meriyankarki2@gmail.com",
     "phone": "+977-9842865179",
     "portfolio": "",
@@ -54,6 +63,8 @@
    "gaurav": {
     "name": "Gaurav Bhatta",
     "role": "Engineering Director" ,
+        "location": "Kathmandu, Nepal",
+
     "company": "Ctrl Bits",
     "email": "bhattagaurav@gmail.com",
     "phone": "+977-9866109959",
@@ -67,6 +78,7 @@
    "dhirendra": {
     "name": "Dhirendra Singh Dhami",
     "role": "Digital Marketing Officer" ,
+    "location": "Kathmandu, Nepal",
     "company": "Ctrl Bits",
     "email": "dhirendra@ctrlbits.com",
     "phone": "+977-9862478859",
