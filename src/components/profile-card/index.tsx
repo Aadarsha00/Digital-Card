@@ -17,22 +17,47 @@ function generateInitials(name: string): string {
   return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
 }
 
-function generateVCF(card: CardData): string {
+// Convert an image URL to a base64 string for embedding in the VCF
+async function imageToBase64(url: string): Promise<string> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      resolve(base64);
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function generateVCF(card: CardData): Promise<string> {
+  let photoLine = "";
+
+  if (card.avatar) {
+    try {
+      const base64 = await imageToBase64(card.avatar);
+      photoLine = `PHOTO;ENCODING=b;TYPE=JPEG:${base64}`;
+    } catch (err) {
+      console.error("Avatar conversion failed", err);
+    }
+  }
+
   const lines = [
     "BEGIN:VCARD",
     "VERSION:3.0",
     `FN:${card.name}`,
-    // N: field — structured as Last;First
     `N:${card.name.split(" ").slice(1).join(" ")};${card.name.split(" ")[0]};;;`,
     `TITLE:${card.role}`,
     `ORG:${card.company}`,
     `EMAIL;TYPE=INTERNET,PREF:${card.email}`,
-    // KEY FIX: TEL needs TYPE=CELL or phones won't save it as a number
     `TEL;TYPE=CELL,VOICE:${card.phone}`,
     card.portfolio ? `URL:${card.portfolio}` : "",
-    card.linkedin  ? `X-SOCIALPROFILE;TYPE=linkedin:${card.linkedin}` : "",
-    card.github    ? `X-SOCIALPROFILE;TYPE=github:${card.github}` : "",
-    card.instagram   ? `X-SOCIALPROFILE;TYPE=instagram:${card.instagram}` : "",
+    card.linkedin ? `X-SOCIALPROFILE;TYPE=linkedin:${card.linkedin}` : "",
+    card.github ? `X-SOCIALPROFILE;TYPE=github:${card.github}` : "",
+    card.instagram ? `X-SOCIALPROFILE;TYPE=instagram:${card.instagram}` : "",
+    photoLine,
     `NOTE:${card.role} at ${card.company}`,
     "END:VCARD",
   ].filter(Boolean);
@@ -57,18 +82,22 @@ export default function ProfileCard({ card }: ProfileCardProps) {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [router]);
 
-  function handleDownloadVCF() {
-    const vcf = generateVCF(card);
-    const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${card.name.replace(/\s+/g, "_")}.vcf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
+async function handleDownloadVCF() {
+  const res = await fetch("/api/vcf", {
+    method: "POST",
+    body: JSON.stringify(card),
+  });
+
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${card.name.replace(/\s+/g, "_")}.vcf`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
 
   return (
     <div
