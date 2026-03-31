@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "@/styles/globals.css";
+import { cn } from "@/lib/utils";
+
+const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -16,8 +20,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Digital Business Card",
-  description: "Scan. Connect. Done.",
+  title: "bitsfolio.page — Your Digital Identity, One Link",
+  description:
+    "Stop sharing scattered contacts. bitsfolio.page turns your name, socials, and contact info into a single beautiful page — built for real connection, not just clicks.",
 };
 
 export default function RootLayout({
@@ -26,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-mono", jetbrainsMono.variable)}>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
       >
