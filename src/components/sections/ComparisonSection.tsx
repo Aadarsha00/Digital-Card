@@ -1,5 +1,19 @@
-import { CheckFat } from "@phosphor-icons/react/dist/ssr";
-import { SectionLabel, SectionTitle, SectionSub } from "@/components/ui/SectionHeading";
+import {
+  CheckFat,
+  User,
+  LinkSimple,
+  AddressBook,
+  Palette,
+  ChartBar,
+  DeviceMobile,
+  AppWindow,
+  CurrencyDollar,
+} from "@phosphor-icons/react/dist/ssr";
+import {
+  SectionLabel,
+  SectionTitle,
+  SectionSub,
+} from "@/components/ui/SectionHeading";
 import clsx from "clsx";
 
 interface DiffBullet {
@@ -7,155 +21,149 @@ interface DiffBullet {
   description: string;
 }
 
-const BULLETS: DiffBullet[] = [
-  {
-    title: "Identity + Links + Contact saving",
-    description:
-      "Most tools do one. bitsfolio.page does all three in a single, unified experience.",
-  },
-  {
-    title: "Built for real contact exchange",
-    description:
-      "Linktree is for clicks. bitsfolio.page is for connections — visitors can save your number directly to their phone.",
-  },
-  {
-    title: "Free, fast, zero learning curve",
-    description:
-      "No clunky templates, no paywalled basics. Open it, build it, share it — done.",
-  },
+const FEATURES = [
+  { label: "Identity", icon: <User size={18} weight="bold" /> },
+  { label: "Links", icon: <LinkSimple size={18} weight="bold" /> },
+  { label: "Contact saving", icon: <AddressBook size={18} weight="bold" /> },
+  { label: "Customizable profile", icon: <Palette size={18} weight="bold" /> },
+  { label: "Analytics", icon: <ChartBar size={18} weight="bold" /> },
+  { label: "Mobile-first", icon: <DeviceMobile size={18} weight="bold" /> },
+  { label: "No app required", icon: <AppWindow size={18} weight="bold" /> },
+  { label: "Free", icon: <CurrencyDollar size={18} weight="bold" /> },
 ];
 
-type TagStatus = "has" | "no";
-
-interface CompetitorRow {
-  name: string;
-  active?: boolean;
-  tags: { label: string; status: TagStatus }[];
-}
-
-const COMPETITORS: CompetitorRow[] = [
+const COMPETITORS = [
   {
-    name: "🟢 bitsfolio.page",
+    name: "bitsfolio.page",
     active: true,
-    tags: [
-      { label: "Identity", status: "has" },
-      { label: "Links", status: "has" },
-      { label: "Contact", status: "has" },
-    ],
+    features: [true, true, true, true, true, true, true, true],
   },
   {
     name: "Linktree",
-    tags: [
-      { label: "Identity", status: "no" },
-      { label: "Links", status: "has" },
-      { label: "Contact", status: "no" },
-    ],
+    features: [false, true, false, false, false, true, true, false],
   },
   {
     name: "Digital biz card",
-    tags: [
-      { label: "Identity", status: "has" },
-      { label: "Links", status: "no" },
-      { label: "Contact", status: "has" },
-    ],
+    features: [true, false, true, false, false, false, false, false],
   },
   {
     name: "vCard",
-    tags: [
-      { label: "Identity", status: "has" },
-      { label: "Links", status: "no" },
-      { label: "Contact", status: "has" },
-    ],
+    features: [true, false, true, false, false, false, false, true],
   },
   {
     name: "Portfolio site",
-    tags: [
-      { label: "Identity", status: "has" },
-      { label: "Links", status: "has" },
-      { label: "Contact", status: "no" },
-    ],
+    features: [true, true, false, true, false, true, true, false],
   },
 ];
 
-function Tag({ label, status }: { label: string; status: TagStatus }) {
-  return (
-    <span
-      className={clsx("rounded-full px-2.5 py-[3px] text-[0.7rem] font-bold", {
-        "bg-lime/15 text-lime": status === "has",
-        "bg-white/[0.06] text-white/30": status === "no",
-      })}
-    >
-      {label}
-    </span>
-  );
-}
-
 export function ComparisonSection() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center px-5 md:px-10 py-20 max-w-6xl mx-auto fade-up">
-      {/* Left — bullets */}
-      <div>
+    <div className="flex flex-col gap-20 items-center px-5 md:px-10 py-20 max-w-6xl mx-auto fade-up font-satoshi">
+      {/* Bullets */}
+      <div className="w-full  mx-auto">
         <SectionLabel>Why bitsfolio</SectionLabel>
-        <SectionTitle>
-          Not just a
-          <br />
-          link-in-bio tool.
-        </SectionTitle>
-        <SectionSub className="mb-2">
-          We combined the best of three categories — and stripped away everything else.
-        </SectionSub>
-
-        <div className="mt-9 flex flex-col gap-5">
-          {BULLETS.map(({ title, description }) => (
-            <div key={title} className="flex gap-4 items-start">
-              <div className="w-7 h-7 rounded-lg bg-lime flex-shrink-0 flex items-center justify-center mt-0.5">
-                <CheckFat size={14} weight="fill" className="text-pitch" />
-              </div>
-              <div>
-                <strong className="font-syne font-bold block mb-1">{title}</strong>
-                <p className="text-sm text-[#666] leading-relaxed">{description}</p>
-              </div>
-            </div>
-          ))}
+        <div className="flex align-bottom justify-between w-4/5 gap-10">
+          <SectionTitle className="w-1/2">
+            Not just a
+            <br />
+            link-in-bio tool.
+          </SectionTitle>
+          <SectionSub className="w-2/3">
+            We combined the best of three categories — and stripped away
+            everything else.
+          </SectionSub>
         </div>
       </div>
 
-      {/* Right — diff visual */}
-      <div className="bg-pitch rounded-[28px] p-10 relative overflow-hidden diff-glow">
-        <h4 className="font-syne font-bold text-white text-[0.9rem] mb-1">
-          How bitsfolio stacks up
-        </h4>
-        <p className="text-[0.75rem] text-white/30 mb-5">
-          Identity · Links · Contact saving · Free
-        </p>
-
-        <div className="flex flex-col gap-3">
-          {COMPETITORS.map(({ name, active, tags }) => (
-            <div
-              key={name}
-              className={clsx(
-                "flex items-center gap-2.5 rounded-[14px] px-4 py-3.5 text-sm border",
-                active
-                  ? "bg-lime/[0.06] border-lime/20"
-                  : "bg-white/[0.04] border-white/[0.06]"
-              )}
-            >
-              <span
+      {/* Table-based horizontal feature comparison */}
+      <div className="w-full overflow-x-auto mt-10">
+        <table className="min-w-full border-separate border-spacing-y-2">
+          <thead>
+            <tr>
+              <th className="text-left px-3 py-2 text-gray-700 font-bold bg-white/80 rounded-tl-xl">
+                {""}
+              </th>
+              {FEATURES.map((feature) => (
+                <th
+                  key={feature.label}
+                  className="px-3 py-2 text-center font-semibold text-gray-700 bg-white/80"
+                >
+                  <div className="flex flex-col items-center gap-1">
+                    <span>{feature.icon}</span>
+                    <span className="text-xs whitespace-nowrap">
+                      {feature.label}
+                    </span>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {COMPETITORS.map((comp, ridx) => (
+              <tr
+                key={comp.name}
                 className={clsx(
-                  "text-[0.78rem] min-w-[110px]",
-                  active ? "text-white font-semibold" : "text-white/45"
+                  comp.active ? "bg-lime-50" : "bg-white/70",
+                  "rounded-full border border-gray-200",
                 )}
               >
-                {name}
-              </span>
-              <div className="flex gap-1.5 ml-auto flex-wrap justify-end">
-                {tags.map((tag) => (
-                  <Tag key={tag.label} {...tag} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+                <td
+                  className={clsx(
+                    "px-3 py-2 font-bold text-left whitespace-nowrap",
+                    comp.active ? "text-lime-700" : "text-gray-800",
+                  )}
+                >
+                  {comp.name.replace("bitsfolio.page", "bitsfolio")}
+                </td>
+                {comp.features.map(
+                  (has: boolean | null | undefined, i: number) => (
+                    <td key={i} className="text-center px-2">
+                      {has === true ? (
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-lime-500 text-white mx-auto">
+                          <CheckFat size={15} weight="fill" />
+                        </span>
+                      ) : has === false ? (
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-300 text-gray-500 mx-auto">
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6 6L14 14M14 6L6 14"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-400 mx-auto">
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M5 10H15"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </span>
+                      )}
+                    </td>
+                  ),
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

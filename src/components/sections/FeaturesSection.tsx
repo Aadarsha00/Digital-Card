@@ -6,8 +6,12 @@ import {
   Lightning,
   ChartBar,
 } from "@phosphor-icons/react/dist/ssr";
-import { SectionLabel, SectionTitle, SectionSub } from "@/components/ui/SectionHeading";
-import { type ReactNode } from "react";
+import {
+  SectionLabel,
+  SectionTitle,
+  SectionSub,
+} from "@/components/ui/SectionHeading";
+import { JSX, type ReactNode } from "react";
 import clsx from "clsx";
 
 type CardVariant = "default" | "accent" | "lime";
@@ -73,56 +77,46 @@ const FEATURES: Feature[] = [
 
 interface FeatureCardProps extends Feature {}
 
-function FeatureCard({ icon, title, description, linkLabel, variant }: FeatureCardProps) {
-  const wrapperCls = clsx(
-    "rounded-[20px] p-8 border transition-all duration-200 hover:-translate-y-1",
-    {
-      "bg-white border-black/[0.05] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)]":
-        variant === "default",
-      "bg-pitch text-white border-transparent hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)]":
-        variant === "accent",
-      "bg-lime text-pitch border-transparent hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]":
-        variant === "lime",
-    }
-  );
-
-  const iconBg = clsx("w-12 h-12 rounded-[14px] flex items-center justify-center mb-5", {
-    "bg-lime": variant === "default",
-    "bg-lime/[0.12]": variant === "accent",
-    "bg-black/10": variant === "lime",
-  });
-
-  const descCls = clsx("text-sm leading-relaxed opacity-65", {
-    "text-white": variant === "accent",
-  });
-
-  const linkCls = clsx(
-    "inline-flex items-center gap-1.5 mt-5 text-[0.82rem] font-bold font-syne opacity-75",
-    {
-      "text-pitch": variant === "default" || variant === "lime",
-      "text-lime opacity-100": variant === "accent",
-    }
-  );
-
+function FeatureCard({
+  title,
+  description,
+  linkLabel,
+}: FeatureCardProps): JSX.Element {
   return (
-    <div className={wrapperCls}>
-      <div className={iconBg}>{icon}</div>
-      <h3 className="font-syne font-bold text-[1.05rem] mb-2.5">{title}</h3>
-      <p className={descCls}>{description}</p>
-      <a href="#" className={linkCls}>
-        {linkLabel}
-      </a>
+    <div className="flex flex-col gap-2 px-2 py-8 md:px-6 md:py-12 bg-transparent">
+      <h2 className="font-syne font-bold text-lg md:text-xl text-lime-700 uppercase mb-1">
+        {title}
+      </h2>
+      <div className="text-gray-700 text-base md:text-lg leading-relaxed mb-1">
+        {description}
+      </div>
+      <div>
+        <a
+          href="#"
+          className="text-lime-700 font-semibold text-sm md:text-base underline underline-offset-2 hover:text-lime-900 transition-colors"
+        >
+          {linkLabel}
+        </a>
+      </div>
     </div>
   );
 }
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="pt-20 pb-10">
+    <section
+      id="features"
+      className="relative pt-24 pb-16 bg-linear-to-b from-[#f7ffe7] via-[#fafff0] to-white/80"
+    >
+      {/* Decorative background shapes */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute -top-24 -left-24 w-72 h-72 bg-lime/20 rounded-full blur-3xl opacity-60" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-lime/10 rounded-full blur-2xl opacity-50" />
+      </div>
       {/* Header */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-end max-w-6xl mx-auto mb-14 px-5 md:px-10 fade-up">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 items-end max-w-6xl mx-auto mb-16 px-5 md:px-10 fade-up">
         <div>
-          <SectionLabel>What you get</SectionLabel>
+          <SectionLabel className="text-lime-700">What you get</SectionLabel>
           <SectionTitle>
             Everything to share
             <br />
@@ -130,18 +124,17 @@ export function FeaturesSection() {
           </SectionTitle>
         </div>
         <SectionSub>
-          bitsfolio.page isn't just a link-in-bio. It's a full contact exchange system designed
-          for the way real networking happens.
+          bitsfolio.page isn't just a link-in-bio. It's a full contact exchange
+          system designed for the way real networking happens.
         </SectionSub>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 px-5 md:px-10 max-w-6xl mx-auto">
+      {/* Grid with both horizontal and vertical dashed dividers, no card UI */}
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t-2 border-l-2 border-dashed border-lime-200 px-0 md:px-0 max-w-6xl mx-auto">
         {FEATURES.map((feature, i) => (
           <div
             key={feature.title}
-            className="fade-up"
-            style={{ transitionDelay: `${(i % 3) * 80}ms` }}
+            className="fade-up flex flex-col h-full border-b-2 border-r-2 border-dashed border-lime-200 bg-transparent"
           >
             <FeatureCard {...feature} />
           </div>

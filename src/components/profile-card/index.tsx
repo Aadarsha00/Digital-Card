@@ -8,10 +8,16 @@ import { DownloadIcon, WhatsappLogoIcon } from "@phosphor-icons/react";
 
 interface ProfileCardProps {
   card: CardData;
+  fillContainer?: boolean;
 }
 
 function generateInitials(name: string): string {
-  return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 async function imageToBase64(url: string): Promise<string> {
@@ -62,7 +68,10 @@ function SocialIcon({
   children: React.ReactNode;
 }) {
   return (
-    <a href={href} className="flex flex-col items-center gap-1 no-underline text-slate-400 hover:text-slate-600 transition-colors">
+    <a
+      href={href}
+      className="flex flex-col items-center gap-1 no-underline text-slate-400 hover:text-slate-600 transition-colors"
+    >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         {children}
       </svg>
@@ -71,17 +80,20 @@ function SocialIcon({
   );
 }
 
-export default function ProfileCard({ card }: ProfileCardProps) {
+export default function ProfileCard({ card, fillContainer }: ProfileCardProps) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(fillContainer ? true : false);
 
   useEffect(() => {
-    setMounted(true);
-    window.history.pushState(null, "", window.location.href);
-    const handlePopState = () => window.history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [router]);
+    if (!fillContainer) {
+      setMounted(true);
+      window.history.pushState(null, "", window.location.href);
+      const handlePopState = () =>
+        window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", handlePopState);
+      return () => window.removeEventListener("popstate", handlePopState);
+    }
+  }, [router, fillContainer]);
 
   async function handleDownloadVCF() {
     const res = await fetch("/api/vcf", {
@@ -97,7 +109,9 @@ export default function ProfileCard({ card }: ProfileCardProps) {
     URL.revokeObjectURL(url);
   }
 
-  const whatsappMessage = encodeURIComponent(`Hi ${card.name}, I came across your digital card and would love to connect. Can we exchange contact details?`);
+  const whatsappMessage = encodeURIComponent(
+    `Hi ${card.name}, I found your digital card via Bitsfolio and thought it’d be great to connect.`,
+  );
   const cleanPhone = card.phone.replace(/[^\d]/g, "");
   const exchangeHref = cleanPhone
     ? `https://wa.me/${cleanPhone}?text=${whatsappMessage}`
@@ -105,14 +119,19 @@ export default function ProfileCard({ card }: ProfileCardProps) {
 
   return (
     <div
-      className={`w-full max-w-sm mx-auto transition-all duration-500 ease-out  ${
+      className={`${fillContainer ? "w-full h-full" : "w-full max-w-sm mx-auto"} transition-all duration-500 ease-out  ${
         mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
     >
       <div className="w-full relative bg-white rounded-[26px] border border-[#172482] overflow-hidden shadow-lg">
-
         {/* ── Hero photo ── */}
-        <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3 / 2.6", background: "linear-gradient(135deg,#000139 0%,#172482 100%)" }}>
+        <div
+          className="relative w-full overflow-hidden"
+          style={{
+            aspectRatio: "3 / 2.6",
+            background: "linear-gradient(135deg,#000139 0%,#172482 100%)",
+          }}
+        >
           {card.avatar ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -128,7 +147,6 @@ export default function ProfileCard({ card }: ProfileCardProps) {
 
           {/* Bottom vignette */}
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-black/55 to-transparent" />
-
         </div>
 
         {/* ── Content ── */}
@@ -141,7 +159,9 @@ export default function ProfileCard({ card }: ProfileCardProps) {
           </p>
           {/* Bio */}
           {card.description && (
-            <p className="text-[13px] leading-relaxed text-slate-500 font-space-grotesk text-center">{card.description}</p>
+            <p className="text-[13px] leading-relaxed text-slate-500 font-space-grotesk text-center">
+              {card.description}
+            </p>
           )}
 
           {/* Contact pills */}
@@ -151,7 +171,10 @@ export default function ProfileCard({ card }: ProfileCardProps) {
               label="Email"
               value={card.email}
               icon={
-                <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor" />
+                <path
+                  d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z"
+                  fill="currentColor"
+                />
               }
             />
             <ContactRow
@@ -159,16 +182,24 @@ export default function ProfileCard({ card }: ProfileCardProps) {
               label="Phone"
               value={card.phone}
               icon={
-                <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="currentColor" />
+                <path
+                  d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z"
+                  fill="currentColor"
+                />
               }
             />
             {card.portfolio && (
               <ContactRow
                 href={card.portfolio}
                 label="Portfolio"
-                value={card.portfolio.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                value={card.portfolio
+                  .replace(/^https?:\/\//, "")
+                  .replace(/\/$/, "")}
                 icon={
-                  <path d="M3.9 12C3.9 10.29 5.29 8.9 7 8.9H11V7H7C4.24 7 2 9.24 2 12C2 14.76 4.24 17 7 17H11V15.1H7C5.29 15.1 3.9 13.71 3.9 12ZM8 13H16V11H8V13ZM17 7H13V8.9H17C18.71 8.9 20.1 10.29 20.1 12C20.1 13.71 18.71 15.1 17 15.1H13V17H17C19.76 17 22 14.76 22 12C22 9.24 19.76 7 17 7Z" fill="currentColor" />
+                  <path
+                    d="M3.9 12C3.9 10.29 5.29 8.9 7 8.9H11V7H7C4.24 7 2 9.24 2 12C2 14.76 4.24 17 7 17H11V15.1H7C5.29 15.1 3.9 13.71 3.9 12ZM8 13H16V11H8V13ZM17 7H13V8.9H17C18.71 8.9 20.1 10.29 20.1 12C20.1 13.71 18.71 15.1 17 15.1H13V17H17C19.76 17 22 14.76 22 12C22 9.24 19.76 7 17 7Z"
+                    fill="currentColor"
+                  />
                 }
               />
             )}
@@ -176,9 +207,14 @@ export default function ProfileCard({ card }: ProfileCardProps) {
               <ContactRow
                 href={card.linkedin}
                 label="LinkedIn"
-                value={card.linkedin.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, "").replace(/\/$/, "")}
+                value={card.linkedin
+                  .replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, "")
+                  .replace(/\/$/, "")}
                 icon={
-                  <path d="M20.447 20.452H16.893V14.883C16.893 13.555 16.866 11.846 15.041 11.846C13.188 11.846 12.905 13.291 12.905 14.785V20.452H9.351V9H12.765V10.561H12.811C13.288 9.661 14.448 8.711 16.181 8.711C19.782 8.711 20.448 11.081 20.448 14.166L20.447 20.452ZM5.337 7.433C4.193 7.433 3.274 6.507 3.274 5.368C3.274 4.23 4.194 3.305 5.337 3.305C6.477 3.305 7.401 4.23 7.401 5.368C7.401 6.507 6.476 7.433 5.337 7.433ZM7.119 20.452H3.555V9H7.119V20.452ZM22.225 0H1.771C0.792 0 0 0.774 0 1.729V22.271C0 23.227 0.792 24 1.771 24H22.222C23.2 24 24 23.227 24 22.271V1.729C24 0.774 23.2 0 22.222 0L22.225 0Z" fill="currentColor" />
+                  <path
+                    d="M20.447 20.452H16.893V14.883C16.893 13.555 16.866 11.846 15.041 11.846C13.188 11.846 12.905 13.291 12.905 14.785V20.452H9.351V9H12.765V10.561H12.811C13.288 9.661 14.448 8.711 16.181 8.711C19.782 8.711 20.448 11.081 20.448 14.166L20.447 20.452ZM5.337 7.433C4.193 7.433 3.274 6.507 3.274 5.368C3.274 4.23 4.194 3.305 5.337 3.305C6.477 3.305 7.401 4.23 7.401 5.368C7.401 6.507 6.476 7.433 5.337 7.433ZM7.119 20.452H3.555V9H7.119V20.452ZM22.225 0H1.771C0.792 0 0 0.774 0 1.729V22.271C0 23.227 0.792 24 1.771 24H22.222C23.2 24 24 23.227 24 22.271V1.729C24 0.774 23.2 0 22.222 0L22.225 0Z"
+                    fill="currentColor"
+                  />
                 }
               />
             )}
@@ -220,7 +256,7 @@ export default function ProfileCard({ card }: ProfileCardProps) {
             </div>
           )}
         </div>
-
       </div>
-      </div>
-  );  }
+    </div>
+  );
+}

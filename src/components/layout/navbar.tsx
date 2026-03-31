@@ -1,51 +1,87 @@
-import { Button } from "@/components/ui/Button";
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  MobileNav,
+  MobileNavHeader,
+  MobileNavMenu,
+  MobileNavToggle,
+  NavBody,
+  Navbar,
+  NavbarButton,
+  NavbarLogo,
+  NavItems,
+} from "@/components/ui/resizable-navbar";
 
-const NAV_LINKS = [
-  { href: "#features", label: "Features" },
-  { href: "#how", label: "How it works" },
-  { href: "#usecases", label: "Use cases" },
-  { href: "#pricing", label: "Pricing" },
+const navLinks = [
+  { name: "Home", link: "/" },
+  { name: "Features", link: "/features" },
+  { name: "Examples", link: "/examples" },
+  { name: "Pricing", link: "/pricing" },
+  { name: "Help", link: "/contact" },
 ];
 
-export function Navbar() {
+export function NavigationMenu() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
+
+  const handleBookCallButtonPress = () => {
+    router.push("/contact");
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-10 py-4 bg-off-white/85 backdrop-blur-md border-b border-black/[0.06]">
-      {/* Brand */}
-      <div className="font-syne text-[1.15rem] font-extrabold tracking-[-0.03em] flex items-center gap-1.5">
-        bits
-        <span className="bg-lime text-pitch rounded-md px-[7px] py-[1px]">
-          folio
-        </span>
-        .page
-      </div>
+    <Navbar>
+      <NavBody>
+        <NavbarLogo />
+        <NavItems items={navLinks} />
+        <div className="flex items-center gap-2">
+          <NavbarButton
+            onClick={handleBookCallButtonPress}
+            className="rounded-full text-white dark:text-black"
+            variant="primary"
+          >
+            Book a call
+          </NavbarButton>
+        </div>
+      </NavBody>
 
-      {/* Desktop links */}
-      <ul className="hidden md:flex gap-8 list-none">
-        {NAV_LINKS.map(({ href, label }) => (
-          <li key={href}>
-            <a
-              href={href}
-              className="text-pitch text-sm font-medium opacity-65 hover:opacity-100 transition-opacity no-underline font-dm"
-            >
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <MobileNav>
+        <MobileNavHeader>
+          <NavbarLogo />
+          <MobileNavToggle
+            isOpen={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          />
+        </MobileNavHeader>
 
-      {/* Actions */}
-      <div className="flex items-center gap-3">
-        <Button
-          href="#"
-          variant="ghost"
-          className="hidden sm:inline-flex py-2.5 px-5"
+        <MobileNavMenu
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
         >
-          Log in
-        </Button>
-        <Button href="#" variant="dark" className="py-2.5 px-5">
-          Claim your page →
-        </Button>
-      </div>
-    </nav>
+          {navLinks.map((item, idx) => (
+            <Link
+              key={`mobile-link-${idx}`}
+              href={item.link}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full rounded-xl px-3 py-2 text-base font-medium text-foreground/80 transition-colors hover:bg-primary/10 hover:text-foreground"
+            >
+              <span className="block">{item.name}</span>
+            </Link>
+          ))}
+
+          <div className="mt-2 flex w-full flex-col gap-3">
+            <NavbarButton
+              onClick={handleBookCallButtonPress}
+              variant="primary"
+              className="w-full rounded-full"
+            >
+              Book a call
+            </NavbarButton>
+          </div>
+        </MobileNavMenu>
+      </MobileNav>
+    </Navbar>
   );
 }
